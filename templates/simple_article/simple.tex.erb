@@ -1,0 +1,67 @@
+\title{A Simple \LaTeXe{} Article Template}
+
+\author{<%= t.first_name + " " + t.last_name %>\\
+        <%= t.email %> \\
+        Department of Computer Science\\
+        Purdue University\\
+        West Lafayette, IN
+}
+
+\date{\today}
+
+\documentclass[12pt]{article}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is the paper's abstract \ldots
+\end{abstract}
+
+
+\section{Introduction} % (fold)
+\label{sec:introduction}
+
+This is time for all good men to come to the aid of their party!
+
+% section introduction (end)
+
+\section{Related Work} % (fold)
+\label{sec:related_work}
+
+You may also be interested in being awesome \cite{test}.
+
+% section related_work (end)
+
+
+\section{Methodology} % (fold)
+\label{sec:methodology}
+
+There are many methodologies, but this one is mine.
+
+% section methodology (end)
+
+
+\section{Results} % (fold)
+\label{sec:results}
+
+We have amazing results.
+
+% section results (end)
+
+
+\section{Summary} % (fold)
+\label{sec:summary}
+
+We never draw conclusions; that's something the reader gets to do.
+
+% section summary (end)
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{simple}
+
+\end{document}
+
