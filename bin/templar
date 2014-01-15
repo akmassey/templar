@@ -3,8 +3,7 @@
 require 'optparse'
 require_relative '../lib/templar'
 
-@output = nil
-
+@options = {}
 op = OptionParser.new do |opts|
   opts.banner = "Templar: a LaTeX template manager"
   opts.define_head "Usage: templar [options] <filename>"
@@ -15,7 +14,7 @@ op = OptionParser.new do |opts|
   opts.separator "Options:"
 
   opts.on("-t", "--templates [DIR]", "Use this directory of templates.") do |dir|
-    @templates = dir
+    @options[:template_dir] = dir
   end
 
   opts.on_tail("-h", "--help", "Show this message") do
@@ -33,8 +32,14 @@ op.parse!
 
 input = ARGV.shift.to_s.strip
 
+if @options[:template_dir]
+  @templates = @options[:template_dir]
+else
+  @templates = Templar::TemplateVars.new.default_template_dir
+end
+
 app = Templar::Application.new @templates
 
-app.templates
+p app.templates
 
-puts "would've set it up here: #{input} using #{@templates}"
+puts "would've set it up here: #{input} using #{@templates.path}"
