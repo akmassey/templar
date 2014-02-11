@@ -1,45 +1,11 @@
 #! /usr/bin/env ruby -w
 
 require 'optparse'
+require 'fileutils'
 require_relative '../lib/templar'
 
-@options = {}
-op = OptionParser.new do |opts|
-  opts.banner = "Templar: a LaTeX template manager"
-  opts.define_head "Usage: templar [options] <filename>"
-  opts.separator ""
-  opts.separator "Examples:"
-  opts.separator " templar --templates '../template_dir' new-project"
-  opts.separator ""
-  opts.separator "Options:"
+# TODO: Don't really like this.  Should use a flag to get template directory
+# before creating a new application.
+Templar::Application.new(nil).run
+exit
 
-  opts.on("-t", "--templates [DIR]", "Use this directory of templates.") do |dir|
-    @options[:template_dir] = dir
-  end
-
-  opts.on_tail("-h", "--help", "Show this message") do
-    puts opts
-    exit
-  end
-
-  opts.on_tail("-v", "--version", "Show version") do
-    puts Templar::VERSION
-    exit
-  end
-end
-
-op.parse!
-
-input = ARGV.shift.to_s.strip
-
-if @options[:template_dir]
-  @templates = @options[:template_dir]
-else
-  @templates = Templar::TemplateVars.new.default_template_dir
-end
-
-app = Templar::Application.new @templates
-
-p app.templates
-
-puts "would've set it up here: #{input} using #{@templates.path}"
