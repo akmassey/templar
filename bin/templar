@@ -1,7 +1,5 @@
 #! /usr/bin/env ruby -w
 
-require 'optparse'
-require 'fileutils'
 require_relative '../lib/templar'
 
 # TODO: Don't really like this.  Should use a flag to get template directory

@@ -1,3 +1,4 @@
+require 'optparse'
 require 'ostruct'
 
 module Templar
@@ -21,6 +22,8 @@ module Templar
     end
 
     def setup_template
+      template = Template.new options
+      template.apply
       puts "would've set it up here: #{options.output_dir.path} using the #{options.template} template from #{options.template_dir.path}"
     end
 
