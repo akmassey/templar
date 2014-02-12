@@ -1,14 +1,13 @@
 require 'optparse'
 require 'ostruct'
+require 'safe_yaml'
 
 module Templar
   class Application
     attr_reader :name
 
-    def initialize(templates)
-      options.template_dir = TemplateVars.new.default_template_dir
-      options.template = TemplateVars.new.default_template
-      options.output_dir = TemplateVars.new.default_output_dir
+    def initialize
+      options.config = Templar::Setup.new
     end
 
     def templates
@@ -55,19 +54,23 @@ module Templar
           exit
         end
 
-        opts.on("-t", "--template [NAME]", "Choose a template to use. (Default: #{Templar::TemplateVars.new.default_template})") do |t|
-          options.template = t
+        opts.on("-c", "--configuration [CONFIG]", "Specify a Templar Configuration file. (Default: #{options.config.conf_file})") do |conf|
+          options.config.load(conf)
+        end
+
+        opts.on("-t", "--template [NAME]", "Choose a template to use. (Default: #{options.config.template})") do |t|
+          options.config.template = t
           unless templates.include?(options.template)
             raise "Invalid template."
           end
         end
 
-        opts.on("-d", "--directory [DIR]", "Set templates directory. (Default: #{Templar::TemplateVars.new.default_template_dir.path})") do |dir|
-          options.template_dir = Dir.open(dir)
+        opts.on("-d", "--directory [DIR]", "Set templates directory. (Default: #{options.config.template_dir.path})") do |dir|
+          options.config.template_dir = Dir.open(dir)
         end
 
-        opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{Templar::TemplateVars.new.default_output_dir})") do |dir|
-          options.output_dir = Dir.open(dir)
+        opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{options.config.output_dir})") do |dir|
+          options.config.output_dir = Dir.open(dir)
         end
 
         opts.on_tail("-v", "--version", "Show version") do
@@ -127,12 +130,12 @@ module Templar
     end
 
     def handle_arguments
-      options.project_name = ARGV.shift.to_s.strip
+      options.config.project_name = ARGV.shift.to_s.strip
     end
 
     def get_title
       print "Title: "
-      options.project_title = gets.chomp
+      options.config.project_title = gets.chomp
     end
 
   end

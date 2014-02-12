@@ -4,18 +4,27 @@ module Templar
   class Template
     def initialize(options)
       validate_options(options)
-      @output_dir = options.output_dir
-      @template_dir = options.template_dir
-      @template = options.template
-      @project = options.project_name
+      @output_dir = options.config.output_dir
+      @template_dir = options.config.template_dir
+      @template = options.config.template
+      @author = options.config.author
+      @affiliation = options.config.affiliation
+      @department = options.config.department
+      @email = options.config.email
+      @title = options.config.project_title
+      @project = options.config.project_name
     end
 
     def validate_options(options)
-      raise "Invalid output directory." unless options.respond_to?(:output_dir)
-      raise "Invalid template." unless options.respond_to?(:template)
-      raise "Invalid template directory." unless options.respond_to?(:template_dir)
-      raise "Invalid project title." unless options.respond_to?(:project_title)
-      raise "Invalid project name." unless options.respond_to?(:project_name)
+      raise "Invalid output directory." unless options.config.respond_to?(:output_dir)
+      raise "Invalid template." unless options.config.respond_to?(:template)
+      raise "Invalid template directory." unless options.config.respond_to?(:template_dir)
+      raise "Invalid author." unless options.config.respond_to?(:author)
+      raise "Invalid affiliation." unless options.config.respond_to?(:affiliation)
+      raise "Invalid department." unless options.config.respond_to?(:department)
+      raise "Invalid email." unless options.config.respond_to?(:email)
+      raise "Invalid project name." unless options.config.respond_to?(:project_name)
+      raise "Invalid project title." unless options.config.respond_to?(:project_title)
     end
 
     def apply
