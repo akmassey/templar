@@ -6,8 +6,9 @@ module Templar
     attr_reader :name
 
     def initialize(templates)
-      options.ouput_dir = Dir.pwd
       options.template_dir = TemplateVars.new.default_template_dir
+      options.template = TemplateVars.new.default_template
+      options.output_dir = TemplateVars.new.default_output_dir
     end
 
     def templates
@@ -18,13 +19,13 @@ module Templar
 
     def run
       init
+      get_title
       setup_template
     end
 
     def setup_template
       template = Template.new options
       template.apply
-      puts "would've set it up here: #{options.output_dir.path} using the #{options.template} template from #{options.template_dir.path}"
     end
 
     # Initialize the command line parameters and app name.
@@ -42,10 +43,10 @@ module Templar
 
       OptionParser.new do |opts|
         opts.banner = "#{@name}: a LaTeX template manager"
-        opts.define_head "Usage: templar [options] <filename>"
+        opts.define_head "Usage: templar [options] <project name>"
         opts.separator ""
         opts.separator "Examples:"
-        opts.separator " templar --templates '../template_dir' new-project"
+        opts.separator " templar -t article sample"
         opts.separator ""
         opts.separator "Options:"
 
@@ -54,11 +55,18 @@ module Templar
           exit
         end
 
-        opts.on("-t", "--templates [DIR]", "Set templates directory. (Default: #{Templar::TemplateVars.new.default_template_dir.path})") do |dir|
+        opts.on("-t", "--template [NAME]", "Choose a template to use. (Default: #{Templar::TemplateVars.new.default_template})") do |t|
+          options.template = t
+          unless templates.include?(options.template)
+            raise "Invalid template."
+          end
+        end
+
+        opts.on("-d", "--directory [DIR]", "Set templates directory. (Default: #{Templar::TemplateVars.new.default_template_dir.path})") do |dir|
           options.template_dir = Dir.open(dir)
         end
 
-        opts.on("-d", "--directory [DIR]", "Set output directory") do |dir|
+        opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{Templar::TemplateVars.new.default_output_dir})") do |dir|
           options.output_dir = Dir.open(dir)
         end
 
@@ -119,10 +127,12 @@ module Templar
     end
 
     def handle_arguments
-      options.template = ARGV.shift.to_s.strip
-      unless templates.include?(options.template)
-        raise "Invalid template."
-      end
+      options.project_name = ARGV.shift.to_s.strip
+    end
+
+    def get_title
+      print "Title: "
+      options.project_title = gets.chomp
     end
 
   end
