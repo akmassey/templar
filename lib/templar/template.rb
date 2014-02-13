@@ -17,6 +17,8 @@ module Templar
       @email = options.config.email
       @title = options.config.project_title
       @project = options.config.project_name
+      @month = Date.today.strftime("%B")
+      @year = Date.today.year
     end
 
     def validate_options(options)
