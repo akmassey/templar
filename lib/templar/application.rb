@@ -11,7 +11,7 @@ module Templar
     end
 
     def templates
-      options.template_dir.entries.reject do |d|
+      options.config.template_dir.entries.reject do |d|
         d if [".", ".."].include?(d)
       end
     end
@@ -59,8 +59,9 @@ module Templar
         end
 
         opts.on("-t", "--template [NAME]", "Choose a template to use. (Default: #{options.config.template})") do |t|
-          options.config.template = t
-          unless templates.include?(options.template)
+          if templates.include?(t)
+            options.config.template = t
+          else
             raise "Invalid template."
           end
         end
@@ -71,6 +72,11 @@ module Templar
 
         opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{options.config.output_dir})") do |dir|
           options.config.output_dir = Dir.open(dir)
+        end
+
+        opts.on("-l", "--list-templates", "List available templates.") do
+          puts "#{templates}"
+          exit
         end
 
         opts.on_tail("-v", "--version", "Show version") do

@@ -4,12 +4,16 @@ module Templar
   class Template
     def initialize(options)
       validate_options(options)
+
+      # TODO: need a way to set these up so that non-require attributes are
+      # still loaded as instance variables for erb to process them
       @output_dir = options.config.output_dir
       @template_dir = options.config.template_dir
       @template = options.config.template
       @author = options.config.author
       @affiliation = options.config.affiliation
       @department = options.config.department
+      @city = options.config.city
       @email = options.config.email
       @title = options.config.project_title
       @project = options.config.project_name
@@ -28,7 +32,7 @@ module Templar
     end
 
     def apply
-      apply_directory(@template_dir.path)
+      apply_directory(File.join(@template_dir.path, @template))
     end
 
     # Copies a file or processes an erb template

@@ -10,8 +10,8 @@ module Templar
                   email: "jpurdue1@purdue.edu",
                   template_dir: Dir.new(File.join(Dir.home, ".templar")),
                   template: "article",
-                  output_dir: Dir.pwd,
-                  project_title: "Awesome Document",
+                  output_dir: Dir.new(Dir.pwd),
+                  project_title: "Go Boilers!",
                   project_name: "article"
       }
 
@@ -24,7 +24,6 @@ module Templar
 
     def load(filename)
       load_yaml(filename)
-      p @config
     end
 
     def load_yaml(filename)
