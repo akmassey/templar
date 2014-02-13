@@ -11,6 +11,7 @@ module Templar
       @template_dir = options.config.template_dir
       @template = options.config.template
       @author = options.config.author
+      @biography = options.config.biography
       @affiliation = options.config.affiliation
       @department = options.config.department
       @city = options.config.city
