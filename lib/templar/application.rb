@@ -70,7 +70,7 @@ module Templar
           options.config.template_dir = Dir.open(dir)
         end
 
-        opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{options.config.output_dir})") do |dir|
+        opts.on("-o", "--output [DIR]", "Set output directory. (Default: #{options.config.output_dir.path})") do |dir|
           options.config.output_dir = Dir.open(dir)
         end
 
