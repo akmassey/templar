@@ -11,6 +11,9 @@ module Templar
       @template_dir = options.config.template_dir
       @template = options.config.template
       @author = options.config.author
+      @first_name = options.config.first_name
+      @last_name = options.config.last_name
+      @webpage = options.config.webpage
       @biography = options.config.biography
       @affiliation = options.config.affiliation
       @department = options.config.department
@@ -22,6 +25,7 @@ module Templar
       @year = Date.today.year
     end
 
+    # TODO: This doesn't validate first_name, last_name, or webpage
     def validate_options(options)
       raise "Invalid output directory." unless options.config.respond_to?(:output_dir)
       raise "Invalid template." unless options.config.respond_to?(:template)
@@ -44,7 +48,12 @@ module Templar
         out = File.join(output_dir, File.basename(file, ".erb").gsub(@template, @project))
         erb = ERB.new(File.read(file))
         File.open(out, 'w') do |f|
-          f.write erb.result(binding)
+          begin
+            f.write erb.result(binding)
+          rescue
+            puts "Unable to process file: #{file}"
+            exit
+          end
         end
       else
         out = File.join(output_dir, File.basename(file).gsub(@template, @project))
