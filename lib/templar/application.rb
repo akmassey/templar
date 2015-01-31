@@ -18,7 +18,6 @@ module Templar
 
     def run
       init
-      get_title
       setup_template
     end
 
@@ -123,8 +122,8 @@ module Templar
 
     # Display the error message that caused the exception.
     def display_error_message(ex)
-      trace "#{name} aborted!"
-      trace ex.message
+      trace "#{name} aborted!\n"
+      trace ex.message + "\n"
       # if options.backtrace
         # trace ex.backtrace.join("\n")
       # else
@@ -137,11 +136,6 @@ module Templar
 
     def handle_arguments
       options.config.project_name = ARGV.shift.to_s.strip
-    end
-
-    def get_title
-      print "Title: "
-      options.config.project_title = gets.chomp
     end
 
   end
