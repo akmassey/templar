@@ -1,6 +1,9 @@
 require 'safe_yaml'
 
 module Templar
+
+  # TODO: Templar::Setup should be configuration for system-wide stuff.  So
+  # probably only template_dir and output_dir.
   class Setup
     attr_reader :config, :conf_file
     def initialize
@@ -21,11 +24,11 @@ module Templar
 
       reset_config(@config)
       load(@conf_file)
-      prj_cfg_file = File.join(@config[:template_dir],
+      project_config_file = File.join(@config[:template_dir],
                                @config[:template],
                                @config[:project_config_file])
-      if File.exist?(prj_cfg_file) and not File.directory?(prj_cfg_file)
-        load_project_config(YAML.load(File.read(prj_cfg_file)))
+      if File.exist?(project_config_file) and not File.directory?(project_config_file)
+        load_project_config(YAML.load(File.read(project_config_file)))
       end
     end
 
