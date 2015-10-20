@@ -5,7 +5,7 @@ module Templar
     def initialize(options)
       validate_options(options)
 
-      # TODO: need a way to set these up so that non-require attributes are
+      # TODO: need a way to set these up so that non-required attributes are
       # still loaded as instance variables for erb to process them
       @output_dir = options.config.output_dir
       @template_dir = options.config.template_dir
@@ -44,6 +44,10 @@ module Templar
 
     # Copies a file or processes an erb template
     def apply_file(file, output_dir)
+      # TODO: this should refer to the project_config_file variable from
+      # Templar::Setup.
+      return if File.basename(file) == "templar.yaml"
+
       if file.match(/\.erb$/)
         out = File.join(output_dir, File.basename(file, ".erb").gsub(@template, @project))
         erb = ERB.new(File.read(file))
