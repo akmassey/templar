@@ -17,7 +17,9 @@ module Templar
       @biography = options.config.biography
       @affiliation = options.config.affiliation
       @department = options.config.department
+      @institution = options.config.institution
       @city = options.config.city
+      @location = options.config.location
       @email = options.config.email
       @title = options.config.project_title
       @project = options.config.project_name
