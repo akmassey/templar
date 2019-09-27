@@ -1,4 +1,6 @@
 require 'fileutils'
+require 'time'
+require 'openssl'
 
 require_relative "./templar/version"
 require_relative "./templar/setup"

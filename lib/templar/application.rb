@@ -3,6 +3,7 @@ require 'ostruct'
 require 'safe_yaml'
 
 module Templar
+
   class Application
     attr_reader :name
 

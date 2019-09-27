@@ -1,6 +1,7 @@
 require 'safe_yaml'
 
 module Templar
+  SafeYAML::OPTIONS[:default_mode] = :safe
 
   # TODO: Templar::Setup should be configuration for system-wide stuff.  So
   # probably only template_dir and output_dir.
