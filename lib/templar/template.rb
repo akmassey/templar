@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'erb'
 
 module Templar
@@ -23,21 +25,22 @@ module Templar
       @email = options.config.email
       @title = options.config.project_title
       @project = options.config.project_name
-      @month = Date.today.strftime("%B")
+      @month = Date.today.strftime('%B')
       @year = Date.today.year
     end
 
     # TODO: This doesn't validate first_name, last_name, or webpage
     def validate_options(options)
-      raise "Invalid output directory." unless options.config.respond_to?(:output_dir)
-      raise "Invalid template." unless options.config.respond_to?(:template)
-      raise "Invalid template directory." unless options.config.respond_to?(:template_dir)
-      raise "Invalid author." unless options.config.respond_to?(:author)
-      raise "Invalid affiliation." unless options.config.respond_to?(:affiliation)
-      raise "Invalid department." unless options.config.respond_to?(:department)
-      raise "Invalid email." unless options.config.respond_to?(:email)
-      raise "Invalid project name." unless options.config.respond_to?(:project_name)
-      raise "Invalid project title." unless options.config.respond_to?(:project_title)
+      raise 'Invalid output directory.' unless options.config.respond_to?(:output_dir)
+      raise 'Invalid template.' unless options.config.respond_to?(:template)
+      raise 'Invalid template directory.' unless options.config.respond_to?(:template_dir)
+      raise 'Invalid author.' unless options.config.respond_to?(:author)
+      raise 'Invalid affiliation.' unless options.config.respond_to?(:affiliation)
+      raise 'Invalid department.' unless options.config.respond_to?(:department)
+      raise 'Invalid institution.' unless options.config.respond_to?(:institution)
+      raise 'Invalid email.' unless options.config.respond_to?(:email)
+      raise 'Invalid project name.' unless options.config.respond_to?(:project_name)
+      raise 'Invalid project title.' unless options.config.respond_to?(:project_title)
     end
 
     def apply
@@ -48,10 +51,10 @@ module Templar
     def apply_file(file, output_dir)
       # TODO: this should refer to the project_config_file variable from
       # Templar::Setup.
-      return if File.basename(file) == "templar.yaml"
+      return if File.basename(file) == 'templar.yaml'
 
       if file.match(/\.erb$/)
-        out = File.join(output_dir, File.basename(file, ".erb").gsub(@template, @project))
+        out = File.join(output_dir, File.basename(file, '.erb').gsub(@template, @project))
         erb = ERB.new(File.read(file))
         File.open(out, 'w') do |f|
           begin
@@ -71,7 +74,7 @@ module Templar
 
     # Recursively copies directories and files into the output location
     def apply_directory(dir)
-      output_base = dir.gsub(@template_dir.path, "").gsub(@template, @project)
+      output_base = dir.gsub(@template_dir.path, '').gsub(@template, @project)
       output_dir = File.join(@output_dir.path, output_base)
       FileUtils.mkdir_p(output_dir)
 

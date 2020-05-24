@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'safe_yaml'
+# require 'yaml'
 
 module Templar
   SafeYAML::OPTIONS[:default_mode] = :safe
@@ -8,20 +11,22 @@ module Templar
   class Setup
     attr_reader :config, :conf_file
     def initialize
-      @config = { author: "John Purdue",
-                  affiliation: "Purdue University",
-                  department: "Department of Computer Science",
-                  email: "jpurdue1@purdue.edu",
-                  template_dir: Dir.new(File.join(Dir.home, ".templar")),
-                  template: "article",
+      @config = { author: 'John Purdue',
+                  affiliation: 'Purdue University',
+                  department: 'Department of Computer Science',
+                  email: 'jpurdue1@purdue.edu',
+                  institution: 'Purdue University',
+                  location: 'West Lafayette, IN',
+                  template_dir: Dir.new(File.join(Dir.home, '.templar')),
+                  template: 'article',
                   output_dir: Dir.new(Dir.pwd),
-                  project_title: "Go Boilers!",
-                  project_name: "article",
-                  project_config_file: "templar.yaml"
+                  project_title: 'Go Boilers!',
+                  project_name: 'article',
+                  project_config_file: 'templar.yaml'
       }
 
       # required variables
-      @conf_file = File.join(Dir.home, ".templar_config.yaml")
+      @conf_file = File.join(Dir.home, '.templar_config.yaml')
 
       reset_config(@config)
       load(@conf_file)
@@ -29,7 +34,7 @@ module Templar
                                @config[:template],
                                @config[:project_config_file])
       if File.exist?(project_config_file) and not File.directory?(project_config_file)
-        load_project_config(YAML.load(File.read(project_config_file)))
+        load_project_config(YAML.safe_load(File.read(project_config_file)))
       end
     end
 
@@ -40,11 +45,11 @@ module Templar
     def load_yaml(filename)
       yaml = File.read(filename)
       @conf_file = filename
-      reset_config(YAML.load(yaml))
+      reset_config(YAML.safe_load(yaml))
     end
 
     def reset_config(hash)
-      hash.each do |k,v|
+      hash.each do |k, v|
         instance_variable_set("@#{k}",v)
 
         # set accessor
@@ -58,9 +63,9 @@ module Templar
     def load_project_config(hash)
       p hash
       hash.each do |key, value|
-        if key == "default_variables"
+        if key == 'default_variables'
           value.each do |k, v|
-            instance_variable_set("@#{k}",v)
+            instance_variable_set("@#{k}", v)
 
             # set accessor
             eigenclass = class<<self; self; end
@@ -68,7 +73,7 @@ module Templar
               attr_accessor k
             end
           end
-        elsif key =="prompt_for"
+        elsif key == 'prompt_for'
           value.each do |var|
             response = prompt_for_variable(var)
             instance_variable_set("@#{var}", response)
@@ -84,8 +89,7 @@ module Templar
 
     def prompt_for_variable(var)
       print "Please enter a #{var}: "
-      retval = STDIN.gets.chomp
-      return retval
+      STDIN.gets.chomp
     end
   end
 end

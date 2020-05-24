@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'optparse'
 require 'ostruct'
 require 'safe_yaml'
+# require 'yaml'
 
 module Templar
 
@@ -13,7 +16,7 @@ module Templar
 
     def templates
       options.config.template_dir.entries.reject do |d|
-        d if [".", ".."].include?(d)
+        d if ['.', '..'].include?(d)
       end
     end
 
@@ -28,7 +31,7 @@ module Templar
     end
 
     # Initialize the command line parameters and app name.
-    def init(app_name='templar')
+    def init(app_name = 'templar')
       standard_exception_handling do
         @name = app_name
         handle_options

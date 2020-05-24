@@ -34,11 +34,27 @@ module Templar
       end
 
       if config.respond_to?(:email)
-        if config.email.nil? or config.email = ""
-          @email = "president@purdue.edu"
-        else
-          @email = config.email
-        end
+        @email = if config.email.nil? || config.email == ''
+                   'president@purdue.edu'
+                 else
+                   config.email
+                 end
+      end
+
+      if config.respond_to?(:location)
+        @location = if config.institution.nil? || config.institution == ''
+                      'West Lafayette, IN'
+                    else
+                      config.institution
+                    end
+      end
+
+      if config.respond_to?(:institution)
+        @institution = if config.institution.nil? || config.institution == ''
+                         'Purdue University'
+                       else
+                         config.institution
+                       end
       end
     end
 
